@@ -37,7 +37,22 @@ output "cloudfront_status" {
 
 output "acm_certificate_arn" {
   description = "The ARN of the ACM certificate"
-  value       = module.cloudfront.certificate_arn
+  value       = module.acm.certificate_arn
+}
+
+output "acm_certificate_domain" {
+  description = "The domain name of the ACM certificate"
+  value       = module.acm.certificate_domain_name
+}
+
+output "acm_certificate_status" {
+  description = "The status of the ACM certificate"
+  value       = module.acm.certificate_status
+}
+
+output "acm_validation_records" {
+  description = "The DNS validation records created for the certificate"
+  value       = module.acm.validation_records
 }
 
 # Route53 Outputs
@@ -60,7 +75,4 @@ output "clipshare_config" {
     cloudfront_url = "https://${module.cloudfront.distribution_domain_name}"
     custom_url     = var.domain_name != "" ? "https://${var.domain_name}" : "https://${module.cloudfront.distribution_domain_name}"
   }
-}
-
-description = "ClipShare Infrastructure Deployment Outputs"
 }

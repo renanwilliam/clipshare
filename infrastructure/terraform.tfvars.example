@@ -6,8 +6,10 @@ environment = "production"
 bucket_name = "clipshare-videos-yourdomain"
 
 # Domain Configuration
-domain_name = "yourdomain.com"
-cloudfront_aliases = ["yourdomain.com", "www.yourdomain.com"]
+domain_name = "clipshare.yourdomain.com"
+route53_zone_name = "yourdomain.com"
+cloudfront_aliases = ["clipshare.yourdomain.com"]
+acm_subject_alternative_names = ["*.yourdomain.com"]
 
 # CORS Configuration (restrict to your app domains in production)
 allowed_origins = ["https://yourdomain.com", "https://www.yourdomain.com", "app://localhost"]

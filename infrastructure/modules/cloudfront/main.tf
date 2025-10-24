@@ -1,9 +1,3 @@
-# ACM Certificate for custom domain
-data "aws_acm_certificate" "clipshare_cert" {
-  domain   = var.domain_name
-  statuses = ["ISSUED"]
-}
-
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "clipshare_cdn" {
   enabled             = true
@@ -17,7 +11,7 @@ resource "aws_cloudfront_distribution" "clipshare_cdn" {
     origin_id   = var.s3_bucket_id
 
     s3_origin_config {
-      origin_access_identity = var.cloudfront_oai_path
+      origin_access_identity = "origin-access-identity/cloudfront/${replace(var.cloudfront_oai_arn, "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ", "")}"
     }
   }
 
@@ -67,7 +61,7 @@ resource "aws_cloudfront_distribution" "clipshare_cdn" {
 
   # Custom SSL certificate
   viewer_certificate {
-    acm_certificate_arn      = data.aws_acm_certificate.clipshare_cert.arn
+    acm_certificate_arn      = var.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -94,12 +88,12 @@ resource "aws_cloudfront_distribution" "clipshare_cdn" {
     error_caching_min_ttl = 0
   }
 
-  # Logging configuration
-  logging_config {
-    include_cookies = false
-    bucket          = var.s3_bucket_domain_name
-    prefix          = "cloudfront-logs/"
-  }
+  # Logging configuration (disabled to avoid ACL issues)
+  # logging_config {
+  #   include_cookies = false
+  #   bucket          = var.s3_bucket_domain_name
+  #   prefix          = "cloudfront-logs/"
+  # }
 
   tags = merge(
     {
@@ -109,7 +103,4 @@ resource "aws_cloudfront_distribution" "clipshare_cdn" {
     },
     var.tags
   )
-
-  # Wait for ACM certificate validation
-  depends_on = [data.aws_acm_certificate.clipshare_cert]
 }

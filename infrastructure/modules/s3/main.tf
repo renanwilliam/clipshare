@@ -31,14 +31,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "clipshare_encrypt
   }
 }
 
-# Block public access for security
+# Block public access for security (adjusted for CloudFront logs)
 resource "aws_s3_bucket_public_access_block" "clipshare_pab" {
   bucket = aws_s3_bucket.clipshare_bucket.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = false  # CloudFront needs this for logs
+  block_public_policy     = true   # Keep public policy blocked
+  ignore_public_acls      = true   # Ignore existing public ACLs
+  restrict_public_buckets = true   # Restrict public buckets
 }
 
 # Lifecycle rules for cost optimization

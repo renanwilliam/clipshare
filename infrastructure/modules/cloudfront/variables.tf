@@ -19,8 +19,13 @@ variable "s3_bucket_domain_name" {
   type        = string
 }
 
-variable "cloudfront_oai_path" {
-  description = "The CloudFront Origin Access Identity path"
+variable "cloudfront_oai_arn" {
+  description = "The CloudFront Origin Access Identity ARN"
+  type        = string
+}
+
+variable "certificate_arn" {
+  description = "The ARN of the validated ACM certificate"
   type        = string
 }
 

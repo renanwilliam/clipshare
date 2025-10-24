@@ -20,6 +20,17 @@ variable "domain_name" {
   type        = string
 }
 
+variable "route53_zone_name" {
+  description = "The Route53 hosted zone name (usually the root domain)"
+  type        = string
+}
+
+variable "acm_subject_alternative_names" {
+  description = "List of subject alternative names for the ACM certificate"
+  type        = list(string)
+  default     = []
+}
+
 variable "cloudfront_aliases" {
   description = "List of aliases for the CloudFront distribution"
   type        = list(string)
